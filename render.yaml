@@ -1,0 +1,30 @@
+services:
+  - type: worker
+    name: monitor-gestao
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python monitor.py
+    plan: free
+    envVars:
+      - key: BETEL_ACCESS_TOKEN
+        sync: false
+      - key: BETEL_SECRET_ACCESS_TOKEN
+        sync: false
+      - key: WEBHOOK_ORCAMENTOS
+        sync: false
+      - key: WEBHOOK_VENDAS
+        sync: false
+      - key: WEBHOOK_ORDENS_SERVICOS
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: monitor-redis
+          property: connectionString
+      - key: POLL_INTERVAL
+        value: "60"
+
+databases:
+  - name: monitor-redis
+    type: redis
+    plan: free
