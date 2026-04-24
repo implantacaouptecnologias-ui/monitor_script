@@ -42,24 +42,6 @@ MONITORS: Dict[str, Dict[str, Any]] = {
             "centro_custo_id": int(os.environ.get("CENTRO_CUSTO_ORCAMENTOS", "240910")),
         },
     },
-    "vendas": {
-        "api_url": f"{BETEL_BASE_URL}/vendas",
-        "webhook_url": os.environ["WEBHOOK_VENDAS"],
-        "state_key": "vendas_last_id",
-        "params": {
-            "pagina": 1,
-            "situacao_id": int(os.environ.get("SITUACAO_VENDAS", "5943149")),
-        },
-    },
-    "ordens_servicos": {
-        "api_url": f"{BETEL_BASE_URL}/ordens_servicos",
-        "webhook_url": os.environ["WEBHOOK_ORDENS_SERVICOS"],
-        "state_key": "ordens_servicos_last_id",
-        "params": {
-            "pagina": 1,
-            "centro_custo_id": int(os.environ.get("CENTRO_CUSTO_OS", "240830")),
-        },
-    },
 }
 
 
@@ -77,8 +59,6 @@ def seed_state_from_env(client: redis.Redis) -> None:
     """
     initial = {
         "orcamentos_last_id": os.environ.get("ORCAMENTOS_LAST_ID"),
-        "vendas_last_id": os.environ.get("VENDAS_LAST_ID"),
-        "ordens_servicos_last_id": os.environ.get("ORDENS_SERVICOS_LAST_ID"),
     }
     for key, val in initial.items():
         if val and not client.exists(key):
