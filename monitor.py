@@ -48,7 +48,21 @@ MONITORS: Dict[str, Dict[str, Any]] = {
 # ── Estado no Redis ───────────────────────────────────────────────────────────
 
 def build_redis_client() -> redis.Redis:
-    return redis.from_url(os.environ["REDIS_URL"], decode_responses=True)
+    url = os.environ.get("REDIS_URL", "")
+    if not url or url == "redis://localhost:6379":
+        log.error(
+            "REDIS_URL não configurado. "
+            "No Railway: adicione um plugin Redis ao projeto e o REDIS_URL será injetado automaticamente."
+        )
+        sys.exit(1)
+    client = redis.from_url(url, decode_responses=True)
+    try:
+        client.ping()
+    except Exception as e:
+        log.error(f"Não foi possível conectar ao Redis url={url} error={e}")
+        sys.exit(1)
+    log.info("Redis connection OK")
+    return client
 
 
 def seed_state_from_env(client: redis.Redis) -> None:
