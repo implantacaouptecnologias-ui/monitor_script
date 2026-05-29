@@ -17,14 +17,6 @@ services:
       - key: WEBHOOK_ORDENS_SERVICOS
         sync: false
       - key: REDIS_URL
-        fromService:
-          type: redis
-          name: monitor-redis
-          property: connectionString
+        sync: false
       - key: POLL_INTERVAL
         value: "60"
-
-  - type: redis
-    name: monitor-redis
-    plan: free
-    ipAllowList: []
