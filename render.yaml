@@ -24,7 +24,7 @@ services:
       - key: POLL_INTERVAL
         value: "60"
 
-databases:
-  - name: monitor-redis
-    type: redis
+  - type: redis
+    name: monitor-redis
     plan: free
+    ipAllowList: []
